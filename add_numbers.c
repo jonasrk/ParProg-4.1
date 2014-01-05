@@ -5,7 +5,7 @@
 
 #define PROGRAM_FILE "add_numbers.cl"
 #define KERNEL_FUNC "add_numbers"
-#define ARRAY_SIZE 1024
+//#define ARRAY_SIZE 1024
 
 #include <math.h>
 #include <stdio.h>
@@ -103,6 +103,8 @@ int main(int argc, char *argv[]) {
 	long long int end_index = atoll(argv[3]);
     
     printf("start_index: %lli end_index: %lli\n", start_index, end_index);
+    
+    long long int ARRAY_SIZE = end_index;
     
     /* OpenCL structures */
     cl_device_id device;
