@@ -5,7 +5,7 @@
 
 #define PROGRAM_FILE "add_numbers.cl"
 #define KERNEL_FUNC "add_numbers"
-//#define ARRAY_SIZE 1024
+#define ARRAY_SIZE 1024
 
 #include <math.h>
 #include <stdio.h>
@@ -99,12 +99,12 @@ cl_program build_program(cl_context ctx, cl_device_id dev, const char* filename)
 
 int main(int argc, char *argv[]) {
     
-    long long int start_index = atoll(argv[2]);
-	long long int end_index = atoll(argv[3]);
+    long long int start_index = atoll(argv[1]);
+	long long int end_index = atoll(argv[2]);
     
     printf("start_index: %lli end_index: %lli\n", start_index, end_index);
     
-    long long int ARRAY_SIZE = end_index;
+//    long long int ARRAY_SIZE = end_index;
     
     /* OpenCL structures */
     cl_device_id device;
@@ -117,7 +117,8 @@ int main(int argc, char *argv[]) {
     
     /* Data and buffers */
     float data[ARRAY_SIZE];
-    float sum[2], total, actual_sum;
+    long long int total;
+    float sum[2], actual_sum;
     cl_mem input_buffer, sum_buffer;
     cl_int num_groups;
     
@@ -201,6 +202,11 @@ int main(int argc, char *argv[]) {
         printf("Check failed.\n");
     else
         printf("Check passed.\n");
+    
+    FILE * Output;
+	Output = fopen("output.txt", "w");
+	fprintf(Output, "%lli", total);
+	fclose(Output);
     
     /* Deallocate resources */
     clReleaseKernel(kernel);
