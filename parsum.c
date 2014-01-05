@@ -117,8 +117,8 @@ int main(int argc, char *argv[]) {
     
     /* Data and buffers */
     float data[ARRAY_SIZE];
-    long long int total;
-    float sum[2], actual_sum;
+    //long long int total;
+    float sum[2], total, actual_sum;
     cl_mem input_buffer, sum_buffer;
     cl_int num_groups;
     
