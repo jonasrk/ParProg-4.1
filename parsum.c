@@ -5,7 +5,7 @@
 
 #define PROGRAM_FILE "add_numbers.cl"
 #define KERNEL_FUNC "add_numbers"
-#define ARRAY_SIZE 1024
+//#define ARRAY_SIZE 1024
 
 #include <math.h>
 #include <stdio.h>
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
     
     printf("start_index: %lli end_index: %lli\n", start_index, end_index);
     
-//    long long int ARRAY_SIZE = end_index;
+    long long int ARRAY_SIZE = end_index;
     
     /* OpenCL structures */
     cl_device_id device;
@@ -139,8 +139,8 @@ int main(int argc, char *argv[]) {
     program = build_program(context, device, PROGRAM_FILE);
     
     /* Create data buffer */
-    global_size = 128;
-    local_size = 64;
+    global_size = ARRAY_SIZE / 8;
+    local_size = global_size / 2;
     num_groups = global_size/local_size;
     input_buffer = clCreateBuffer(context, CL_MEM_READ_ONLY |
                                   CL_MEM_COPY_HOST_PTR, ARRAY_SIZE * sizeof(float), data, &err);
@@ -196,16 +196,17 @@ int main(int argc, char *argv[]) {
         total += sum[j];
     }
     actual_sum = 1.0f * ARRAY_SIZE/2*(ARRAY_SIZE-1);
-    printf("Computed sum = %.1f.\n", total);
+    long long int lli_total = (long long int) total;
+    printf("Computed sum = %.1lli.\n", lli_total);
     printf("Actual sum = %.1f.\n", actual_sum);
-    if(fabs(total - actual_sum) > 0.01*fabs(actual_sum))
+    if(fabs(lli_total - actual_sum) > 0.01*fabs(actual_sum))
         printf("Check failed.\n");
     else
         printf("Check passed.\n");
     
     FILE * Output;
 	Output = fopen("output.txt", "w");
-	fprintf(Output, "%lli", total);
+	fprintf(Output, "%lli", lli_total);
 	fclose(Output);
     
     /* Deallocate resources */
